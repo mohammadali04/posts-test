@@ -1,7 +1,7 @@
 @extends('client.index')
 @section('content')
 <div class="row">
-    <div id="content" class="col-lg-8 col-md-6 col-sm-12 col-xs-12" style="direction: rtl;margin-top:40px">
+    <div id="content" class="col-lg-8 col-md-6 col-sm-12 col-xs-12" style="direction: rtl;margin-top:40px;height:700px;overflow-y:scroll">
         <div class="container">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -10,6 +10,11 @@
             </nav>
             <div class="container col-12 justify-content-around">
                 <div class="row">
+                    <style>
+                        .card{
+                            margin:15px 10px;
+                        }
+                    </style>
                     @foreach ($posts_share as $post)
                     <div class="card" class=" col-lg-3 col-md-6 col-sm-12 col-xs-12" style="width: 18rem;">
                         <img src="{{$post->img}}" class="card-img-top" alt="...">
