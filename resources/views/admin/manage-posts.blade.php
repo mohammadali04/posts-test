@@ -28,12 +28,12 @@
                             <tr>
                                 <td>{{$post->id}}</td>
                                 <td>{{$post->title}}</td>
-                                <td>{{auth()->user()->name}}</td>
+                                <td>{{$post->user->name}}</td>
                                 <td><img src="{{$post->img}}" style="width:40px;height:20px"></td>
                                 <td>
                                     {{mb_substr(strip_tags($post->body),0,50)}}
                                 </td>
-                                <td><a href="{{Route('admin.post.edit',$post->id)}}">ویرایش</a></td>
+                                <td><a href="{{Route('admin.post.edit',$post->title)}}">ویرایش</a></td>
                                 <td><input type="checkbox" name="ids[]" value="{{$post->id}}"></input></td>
                             </tr>
                             @endforeach
@@ -43,6 +43,7 @@
                 </form>
             </div>
         </div>
+        @dd(\Illuminate\Support\Facades\DB::getQueryLog())
     </div>
     @include('admin.sidebar')
 </div>

@@ -15,7 +15,7 @@
                             margin:15px 10px;
                         }
                     </style>
-                    @foreach ($posts_share as $post)
+                    @forelse ($posts_share as $post)
                     <div class="card" class=" col-lg-3 col-md-6 col-sm-12 col-xs-12" style="width: 18rem;">
                         <img src="{{$post->img}}" class="card-img-top" alt="...">
                         <div class="card-body">
@@ -25,7 +25,9 @@
                             <a href="{{Route('post.show',$post->id)}}" class="btn btn-primary">بیشتر</a>
                         </div>
                     </div>
-                    @endforeach
+                    @empty
+                        <h1 class="text-muted">Posti nabod</h1>
+                    @endforelse
                 </div>
             </div>
            

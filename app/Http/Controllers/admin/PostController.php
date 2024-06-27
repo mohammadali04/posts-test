@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostStoreRequest;
+use App\Models\Post;
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\Post;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -14,7 +16,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        DB::enableQueryLog();
+
+        $posts = Post::with('user')->get();
         return view('admin.manage-posts', compact('posts'));
     }
 
@@ -29,19 +33,10 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostStoreRequest $request)
     {
-        $validationData = $request->validate([
-            'title' => 'required',
-            'img' => 'required',
-            'body' => 'required',
-        ]);
-        $time_request = $request->time;
-            try {
-                Post::create(['body' => $request->body, 'img' => $request->img, 'title' => $request->title, 'user_id' => auth()->user()->id,'time'=>$request->time]);
-            } catch (Exception $exception) {
-                return redirect()->back();
-            }
+        Post::create($request->validated());
+
         return redirect()->route('admin.post.index');
     }
 
@@ -68,30 +63,23 @@ class PostController extends Controller
     {
         $validationData = $request->validate([
             'title' => 'required',
-            'img' => 'required',
+            'img' => 'nullable',
             'body' => 'required',
             'time' => 'required',
         ]);
-        
-        try {
-                $post->title = $request->title;
-                $post->time = $request->time;
-                $post->img = $request->img;
-                $post->body = $request->body;
-                $post->user_id = auth()->user()->id;
-                $post->time=$request->time;
-                $post->save();
-            } catch (Exception $exception) {
-                return redirect()->back();
-            }
-            return redirect()->route('admin.post.index');
+
+        $post->update($validationData);
+
+        return redirect()->route('admin.post.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(Post $post)
     {
-        Post::destroy($request->ids);
+        $post->delete();
+
+        return back();
     }
 }

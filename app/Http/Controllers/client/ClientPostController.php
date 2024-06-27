@@ -11,22 +11,9 @@ class ClientPostController extends Controller
     public $time;
   
     public function index(){
-        $time=time();
-        $this->time=$time;
-        $posts=Post::all();
-        $posts_share=[];
-        foreach($posts as $post){
-            $time_share=strtotime($post->updated_at)+($post->time*60);
-            if($this->time>=$time_share){
-                array_push($posts_share,$post);
-            }
-        }
-        if(count($posts_share)!=0){
+        $posts_share = Post::where('release_date', "<=", now())->get();
+
         return view('client.posts',compact('posts_share'));
-        }else{
-            $msg='فعلا پستی وجود ندارد';
-            return view('client.message',compact('msg'));
-        }        
     }
     public function showPost(Post $post){
         $time=time();
